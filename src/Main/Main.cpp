@@ -34,7 +34,7 @@ int main() {
             forms[activeFormID]->handle(event);
         }
 
-        win.clear();
+        win.clear(sf::Color(20, 20, 20));
         forms[activeFormID]->render(win);
         win.display();
 

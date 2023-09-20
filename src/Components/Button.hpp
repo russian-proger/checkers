@@ -58,7 +58,7 @@ public:
         else {
             rectShape.setFillColor(background);
         }
-        rectShape.setOutlineThickness(2);
+        rectShape.setOutlineThickness(1);
         rectShape.setOutlineColor(sf::Color::Black);
         rectShape.setSize(size);
         rectShape.setPosition(position);

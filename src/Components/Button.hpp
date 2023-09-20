@@ -67,8 +67,8 @@ public:
         text.setPosition(sf::Vector2f(this->position.x + (this->size.x - bounds.width) / 2, this->position.y + (this->size.y - bounds.height) / 2));
         text.setFont(fonts.mainFont);
         text.setFillColor(color);
+        text.setCharacterSize(fontSize);
         win.draw(rectShape);
         win.draw(text);
-        text.setCharacterSize(fontSize);
     }
 };

@@ -120,14 +120,37 @@ public:
     }
 
     void render(sf::RenderWindow& win) override {
-        // sf::RectangleShape rect(sf::Vector2f(100, 150));
-        // rect.setOutlineColor(sf::Color::Green);
-        // rect.setOutlineThickness(10);
-        // rect.setPosition(sf::Vector2f(50, 50));
         quit.render(win);
         play.render(win);
     }
 };
+
+class PlayForm : public IForm {
+public:
+    Button back = Button("< Back");
+
+    void onBack() {
+        bridge->openForm(0);
+    }
+
+    PlayForm(Bridge& bridge) {
+        this->bridge = &bridge;
+
+        back.position = sf::Vector2f(10,10);
+        back.size = sf::Vector2f(150, 40);
+        back.clb_onclick = std::bind(&PlayForm::onBack, this);
+    }
+
+    void handle(const sf::Event& event) override {
+        back.handle(event);
+    }
+
+    void render(sf::RenderWindow& win) override {
+        back.render(win);
+    }
+};
+
+
 
 int main() {
     sf::VideoMode vmode = sf::VideoMode(600, 800);
@@ -138,7 +161,7 @@ int main() {
 
     std::vector<IForm*> forms = {
         (IForm*)(new HomeForm(bridge)),
-        (IForm*)(new HomeForm(bridge))
+        (IForm*)(new PlayForm(bridge))
     };
 
     int activeFormID = 0;

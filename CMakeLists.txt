@@ -2,11 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(Checkers)
 
-file(GLOB src 
-    ./src/**/*.cpp
-    ./src/**/*.h
-    ./src/**/*.hpp
-)
+file(GLOB src ./src/**/*.cpp)
 
 add_executable(Checkers ${src})
 

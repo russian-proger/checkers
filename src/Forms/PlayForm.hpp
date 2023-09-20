@@ -26,6 +26,8 @@ public:
         back.position = sf::Vector2f(10,10);
         back.size = sf::Vector2f(150, 40);
         back.clb_onclick = std::bind(&PlayForm::onBack, this);
+
+        board.clb_onclick = [](int a, int b){std::cout << a << ' ' << b << std::endl;};
     }
 
     void handle(const sf::Event& event) override {

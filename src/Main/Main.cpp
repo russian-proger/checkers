@@ -7,7 +7,9 @@
 
 int main() {
     sf::VideoMode vmode = sf::VideoMode(600, 800);
-    sf::RenderWindow win = sf::RenderWindow(vmode, "Checkers", sf::Style::Titlebar | sf::Style::Close);
+    sf::ContextSettings settings = sf::ContextSettings();
+    settings.antialiasingLevel = 8;
+    sf::RenderWindow win = sf::RenderWindow(vmode, "Checkers", sf::Style::Titlebar | sf::Style::Close, settings);
 
 
     Bridge bridge;

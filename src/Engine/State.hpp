@@ -12,7 +12,18 @@ namespace Engine {
         // First 32 bit - Quens
         // Last  32 bit - Pawns
         unsigned long long black, white;
+        
+        // 0 - black
+        // 1 - white
+        // Default: white
+        bool step;
 
+        State() {
+            // Default State
+            black = 0x00000000fff00000;
+            white = 0x0000000000000fff;
+            step  = 1;
+        }
 
         Engine::CellType get(int i, int j) {
             unsigned needle = (1 << getBit(i, j));

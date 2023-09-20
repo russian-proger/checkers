@@ -3,9 +3,9 @@
 namespace Engine {
     enum CellType {
         NONE,
-        BLACK_PAWN,
-        WHITE_PAWN,
-        WHITE_QUEEN,
-        BLACK_QUEEN,
+        BLACK_PAWN = 0b10,
+        WHITE_PAWN = 0b11,
+        WHITE_QUEEN = 0b100,
+        BLACK_QUEEN = 0b101,
     };
 }

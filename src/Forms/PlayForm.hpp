@@ -4,13 +4,17 @@
 #include <SFML/Graphics.hpp>
 
 #include "./Form.hpp"
+#include "../Components/Board.hpp"
 #include "../Components/Button.hpp"
 #include "../Main/Bridge.hpp"
 #include "../Main/Fonts.hpp"
 
+
+
 class PlayForm : public IForm {
 public:
     Button back = Button("< Back");
+    Board board = Board(400, sf::Vector2f(100, 150));
 
     void onBack() {
         bridge->openForm(0);
@@ -26,9 +30,11 @@ public:
 
     void handle(const sf::Event& event) override {
         back.handle(event);
+        board.handle(event);
     }
 
     void render(sf::RenderWindow& win) override {
         back.render(win);
+        board.render(win);
     }
 };

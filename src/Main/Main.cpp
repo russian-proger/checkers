@@ -40,7 +40,7 @@ int main() {
         forms[activeFormID]->render(win);
         win.display();
 
-        sf::sleep(sf::milliseconds(16));
+        sf::sleep(sf::milliseconds(30));
     }
  
     return 0;

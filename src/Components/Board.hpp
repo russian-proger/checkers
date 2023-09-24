@@ -36,7 +36,25 @@ public:
 
     void onClick(int i, int j) {
         if ((i ^ j ^ 1) & 1) return;
-        selected_cell_idx = {j, i};
+        Engine::CellType type = game_state.getByCoords(i, j);
+        if (type & (1ull << 1 + game_state.currentPlayer())) {
+            if (!game_state.isSeries()) {
+                if (selected_cell_idx == sf::Vector2i(j, i)) {
+                    selected_cell_idx = {-1, -1};
+                } else {
+                    selected_cell_idx = {j, i};
+                }
+            }
+        } else if (selected_cell_idx.x != -1) {
+            if (game_state.isValid(Engine::getBit(selected_cell_idx.y, selected_cell_idx.x), Engine::getBit(i, j))) {
+                game_state.makeStep(Engine::getBit(selected_cell_idx.y, selected_cell_idx.x), Engine::getBit(i, j));
+                if (game_state.isSeries()) {
+                    selected_cell_idx = {j, i};
+                } else {
+                    selected_cell_idx = {-1, -1};
+                }
+            }
+        }
     }
 
     void handle(const sf::Event& event) {
@@ -86,7 +104,7 @@ public:
         circle.setOutlineColor(sf::Color(50, 200, 50));
         for (int i = 0; i < 8; i++) {
             for (int j = (i&1)^1; j < 8; j += 2) {
-                auto type = game_state.get(i, j);
+                auto type = game_state.getByCoords(i, j);
                 circle.setPosition(position + sf::Vector2f(size/8*j + (size/16 - radius), size/8*i + (size/16 - radius)));
                 switch (type) {
                     case Engine::CellType::BLACK_PAWN: {
@@ -112,6 +130,21 @@ public:
                         circle.setOutlineThickness(4);
                         win.draw(circle);
                         break;
+                    }
+                }
+            }
+        }
+
+        // Drawing hints
+        sf::CircleShape hint(size/64);
+        hint.setFillColor(sf::Color(50, 150, 50));
+        if (selected_cell_idx.x != -1) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = (i&1)^1; j < 8; j += 2) {
+                    bool isvalid = game_state.isValid(Engine::getBit(selected_cell_idx.y, selected_cell_idx.x), Engine::getBit(i, j));
+                    if (isvalid) {
+                        hint.setPosition(position + sf::Vector2f(size/8*j + (size/16 - hint.getRadius()), size/8*i + (size/16 - hint.getRadius())));
+                        win.draw(hint);
                     }
                 }
             }

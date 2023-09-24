@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "../Main/Fonts.hpp"
-#include "../Engine/State.hpp"
+#include "../Engine/Controller.hpp"
 
 class Board {
 private:
@@ -14,7 +14,7 @@ private:
 
     sf::Vector2i selected_cell_idx = sf::Vector2i(-1, -1);
 
-    Engine::State game_state;
+    Engine::Controller controller;
 
 
 public:
@@ -35,10 +35,11 @@ public:
     }
 
     void onClick(int i, int j) {
-        if ((i ^ j ^ 1) & 1) return;
-        Engine::CellType type = game_state.getByCoords(i, j);
-        if (type & (1ull << 1 + game_state.currentPlayer())) {
-            if (!game_state.isSeries()) {
+        if (!Engine::isValidCoords({i, j})) return;
+        Engine::CellType t_to = controller[{i, j}];
+
+        if (Engine::sameColor(controller.getPlayer(), t_to)) {
+            if (!controller.isCompound()) {
                 if (selected_cell_idx == sf::Vector2i(j, i)) {
                     selected_cell_idx = {-1, -1};
                 } else {
@@ -46,9 +47,9 @@ public:
                 }
             }
         } else if (selected_cell_idx.x != -1) {
-            if (game_state.isValid(Engine::getBit(selected_cell_idx.y, selected_cell_idx.x), Engine::getBit(i, j))) {
-                game_state.makeStep(Engine::getBit(selected_cell_idx.y, selected_cell_idx.x), Engine::getBit(i, j));
-                if (game_state.isSeries()) {
+            if (controller.isPossibleMove({selected_cell_idx.y, selected_cell_idx.x}, {i, j})) {
+                controller.move({selected_cell_idx.y, selected_cell_idx.x}, {i, j});
+                if (controller.isCompound()) {
                     selected_cell_idx = {j, i};
                 } else {
                     selected_cell_idx = {-1, -1};
@@ -101,10 +102,10 @@ public:
         // Drawing Checkers
         float radius = size/20;
         sf::CircleShape circle(radius);
-        circle.setOutlineColor(sf::Color(50, 200, 50));
+        circle.setOutlineColor(sf::Color(250, 80, 80));
         for (int i = 0; i < 8; i++) {
             for (int j = (i&1)^1; j < 8; j += 2) {
-                auto type = game_state.getByCoords(i, j);
+                auto type = controller[{i, j}];
                 circle.setPosition(position + sf::Vector2f(size/8*j + (size/16 - radius), size/8*i + (size/16 - radius)));
                 switch (type) {
                     case Engine::CellType::BLACK_PAWN: {
@@ -141,7 +142,7 @@ public:
         if (selected_cell_idx.x != -1) {
             for (int i = 0; i < 8; i++) {
                 for (int j = (i&1)^1; j < 8; j += 2) {
-                    bool isvalid = game_state.isValid(Engine::getBit(selected_cell_idx.y, selected_cell_idx.x), Engine::getBit(i, j));
+                    bool isvalid = controller.isPossibleMove({selected_cell_idx.y, selected_cell_idx.x}, {i, j});
                     if (isvalid) {
                         hint.setPosition(position + sf::Vector2f(size/8*j + (size/16 - hint.getRadius()), size/8*i + (size/16 - hint.getRadius())));
                         win.draw(hint);

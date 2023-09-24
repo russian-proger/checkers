@@ -1,61 +1,50 @@
 #pragma once
 
 #include <bits/stdc++.h>
-#include "CellType.hpp"
+#include "Types.hpp"
 
 namespace Engine {
-
-    int getBit(int i, int j);
-
-    std::pair<int,int> getCoords(int b);
-
-    int sign(int v);
 
     struct State {
         // [32; 63] bits - Quens
         // [ 0; 31] bits - Pawns
-        unsigned long long black, white;
+        Bit black, white;
         
-        // [0; 4] bits - Last moved figure
-        // 5 bit - Current player step series
+        // [0; 4] bits - Pivot of compound step
+        // 5 bit - Is compound step
         // 6 bit - Current player step (1 - White player; 0 - Black player)
-        unsigned long long flags;
+        Bit flags;
 
         State();
 
         // Default State
         void reset();
 
-        Engine::CellType get(int bit);
+        // Return figure type at the given position
+        CellType get(int idx) const;
 
-        Engine::CellType getByCoords(int i, int j);
+        // Set the given figure type at the given position
+        void set(int bit, CellType type);
 
-        void set(int bit, Engine::CellType type);
+        // Return current player (who making next step)
+        PlayerColor getPlayer() const;
 
-        void setByCoords(int i, int j, Engine::CellType type);
-
-        bool currentPlayer();
-
+        // Set the current player
         void setPlayer(bool v);
 
+        // Toggle player (white -> black, black -> white)
         void togglePlayer();
 
-        void setSeriesPosition(unsigned long long v);
+        // Return  last step position
+        Bit getPivot() const;
 
-        unsigned long long getSeriesPosition();
+        // Set last step position
+        void setPivot(Bit v);
 
-        bool isSeries();
+        // Is the step compound
+        bool isCompound() const;
 
-        void setSeries(bool v);
-
-        int lastStepBit();
-
-        std::pair<int,int> lastStepCoords();
-
-        void canBeat(int bit);
-
-        bool isValid(int sbit, int fbit);
-
-        void makeStep(int sbit, int fbit);
+        // Set step compound status
+        void setCompound(bool v);
     };
 }

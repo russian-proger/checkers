@@ -87,6 +87,10 @@ namespace Engine {
         return false;
     }
 
+    bool Controller::isFinished() const {
+        return state.isFinished();
+    }
+
     bool Controller::isPossibleMove(const Position& from, const Position& to) const {
         CellType ct_from = get(from);
         CellType ct_to   = get(to);

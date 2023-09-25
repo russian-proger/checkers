@@ -4,6 +4,7 @@
 #include "./Bridge.hpp"
 #include "../Forms/HomeForm.hpp"
 #include "../Forms/PlayForm.hpp"
+#include "../Forms/FinishForm.hpp"
 
 int main() {
     sf::VideoMode vmode = sf::VideoMode(600, 800);
@@ -16,12 +17,16 @@ int main() {
 
     std::vector<IForm*> forms = {
         (IForm*)(new HomeForm(bridge)),
-        (IForm*)(new PlayForm(bridge))
+        (IForm*)(new PlayForm(bridge)),
+        (IForm*)(new FinishForm(bridge)),
     };
 
     int activeFormID = 0;
     
-    bridge.openForm = [&activeFormID](int id) { activeFormID = id; };
+    bridge.openForm = [&activeFormID, &forms](int id, std::map<std::string,std::string> options = {}) {
+        forms[id]->init(options);
+        activeFormID = id;
+    };
     bridge.exit = [&](){ win.close(); };
 
     sf::Event event;

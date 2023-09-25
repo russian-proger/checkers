@@ -16,16 +16,22 @@ private:
 
     Engine::Controller controller;
 
-
 public:
     sf::Vector2f position;
     float size;
 
     std::function<void(int,int)> clb_onclick = [](int, int){};
+    std::function<void(Engine::PlayerColor)> clb_onstep = [](Engine::PlayerColor pc){};
+    std::function<void(Engine::PlayerColor)> clb_onfinish = [](Engine::PlayerColor pc){};
 
     Board(float size = 400, sf::Vector2f position = sf::Vector2f(0, 0)) {
         this->position = position;
         this->size = size;
+    }
+
+    void reset() {
+        controller.reset();
+        selected_cell_idx = sf::Vector2i(-1, -1);
     }
 
     bool inBound(const sf::Event::MouseButtonEvent& event) {
@@ -48,11 +54,18 @@ public:
             }
         } else if (selected_cell_idx.x != -1) {
             if (controller.isPossibleMove({selected_cell_idx.y, selected_cell_idx.x}, {i, j})) {
+                Engine::PlayerColor pc = controller.getPlayer();
+
                 controller.move({selected_cell_idx.y, selected_cell_idx.x}, {i, j});
                 if (controller.isCompound()) {
                     selected_cell_idx = {j, i};
                 } else {
+                    this->clb_onstep(pc);
                     selected_cell_idx = {-1, -1};
+                }
+
+                if (controller.isFinished()) {
+                    this->clb_onfinish(pc);
                 }
             }
         }

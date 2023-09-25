@@ -76,4 +76,8 @@ namespace Engine {
     void State::setCompound(bool v) {
         flags = ~(~flags | 0x20ull) | ((Bit)(v)<<5);
     }
+
+    bool State::isFinished() const {
+        return white == 0 || black == 0;
+    }
 }

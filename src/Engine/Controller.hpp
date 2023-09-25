@@ -32,6 +32,9 @@ namespace Engine {
         PlayerColor getPlayer() const;
 
         // Return true if given cell belonds to current player
+        bool isFinished() const;
+
+        // Return true if given cell belonds to current player
         bool isPickable(const Position& pos) const;
 
         // Return true if given cell belonds to opponent

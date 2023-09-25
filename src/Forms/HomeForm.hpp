@@ -19,7 +19,8 @@ public:
     }
 
     void onPlay() {
-        bridge->openForm(1);
+        bridge->openForm(1, {});
+        // bridge->openForm(2, {{"winner", "Player 1"}});
     }
 
     HomeForm(Bridge& bridge) {

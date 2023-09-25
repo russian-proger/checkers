@@ -88,7 +88,7 @@ namespace Engine {
     }
 
     bool Controller::isFinished() const {
-        if (state.isEmpty()) return false;
+        if (state.isEmpty()) return true;
         for (int i = 0; i < 32; i++) {
             for (int j = 0; j < 32; j++) {
                 if (isPossibleMove(convertToPosition(i), convertToPosition(j))) {

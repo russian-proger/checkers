@@ -88,7 +88,15 @@ namespace Engine {
     }
 
     bool Controller::isFinished() const {
-        return state.isFinished();
+        if (state.isEmpty()) return false;
+        for (int i = 0; i < 32; i++) {
+            for (int j = 0; j < 32; j++) {
+                if (isPossibleMove(convertToPosition(i), convertToPosition(j))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     bool Controller::isPossibleMove(const Position& from, const Position& to) const {
@@ -147,7 +155,7 @@ namespace Engine {
             i_pos.second += sj;
         }
 
-        if (to.first == 0 || to.first == 7) {
+        if (to.first == 0 && getPlayer() == PlayerColor::WHITE || to.first == 7 && getPlayer() == PlayerColor::BLACK) {
             state.set(convertToIdx(to), (CellType)(get(to)|1));
         }
 

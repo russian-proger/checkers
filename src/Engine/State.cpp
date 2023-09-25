@@ -77,7 +77,7 @@ namespace Engine {
         flags = ~(~flags | 0x20ull) | ((Bit)(v)<<5);
     }
 
-    bool State::isFinished() const {
+    bool State::isEmpty() const {
         return white == 0 || black == 0;
     }
 }

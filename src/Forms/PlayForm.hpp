@@ -57,6 +57,7 @@ public:
         board.clb_onstep = std::bind(&PlayForm::onStep, this, std::placeholders::_1);
         p1_time = 5 * 60 * 1000000;
         p2_time = 5 * 60 * 1000000;
+        currentPlayer = Engine::PlayerColor::WHITE;
         clock.restart();
     }
 

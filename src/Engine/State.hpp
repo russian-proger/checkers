@@ -47,6 +47,6 @@ namespace Engine {
         // Set step compound status
         void setCompound(bool v);
 
-        bool isFinished() const;
+        bool isEmpty() const;
     };
 }
